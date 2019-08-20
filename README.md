@@ -6,7 +6,7 @@
 
 ## 使用方法
 - switch的截图保存在sd卡中的 *\Nintendo\Album* 目录下，将Album目录整个拷贝到电脑硬盘里
-- **假设拷贝后，截图文件夹为** *D:\Nintendo\Album*
+- **假设拷贝后，截图文件夹为** ***D:\Nintendo\Album***
    - 将run.bat、switch_album_sorter.ps1和game-id.json三个文件拷贝到 *D:\Nintendo\\* 目录中
    - 双击run.bat，脚本开始运行，此时会输出原截图路径和整理后截图所在路径。
    - 提示处理完成后，按任意键退出脚本，整理后的图片都保存在 *D:\Nintendo\Album-sorted* 路径下
