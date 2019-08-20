@@ -33,3 +33,4 @@ Foreach ($file in $fileList)
         Copy-Item $file $newdir
     }
 }
+Write-Host "处理完成！"
