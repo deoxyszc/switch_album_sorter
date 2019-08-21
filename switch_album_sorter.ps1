@@ -14,13 +14,22 @@ if (-not (Test-Path -Path $outputdir))
 }
 
 $fileList = Get-ChildItem  $inputdir -recurse | ?{$_.PsIsContainer -eq $false -and $_.Name -match "\w.jpg$|\w.mp4$"} | %{$_.FullName}
+
 Foreach ($file in $fileList)
 {
+    #通过截图文件名获取游戏ID，通过ID查找json，获取游戏名#
     $filename_parse = (Get-Item $file).Basename -Split "-"
     $gamename = $CONF.($filename_parse[1])
+    
+    #如果获取不到游戏名，需要打开对应截图，请求用户输入游戏名并记录#
+    #查找json中的记录#
     If($gamename -eq $null) 
     {
-        $gamename = '其他'
+        Invoke-Item $file
+        $tempgamename = Read-Host '请输入现在打开的截图对应的游戏名：'
+        $CONF | add-member -Name $filename_parse[1] -Value $tempgamename -MemberType NoteProperty
+        $gamename = $tempgamename
+        #Write-Host $CONF.($filename_parse[1])
     }
     $tempdir = $outputdir + '\' + $gamename
     $newdir  = $tempdir + '\' + (Split-Path -Leaf $file)
@@ -28,8 +37,6 @@ Foreach ($file in $fileList)
     {
         New-Item -Path $outputdir -Name $gamename -type "directory"
     }
-    #$filename = (Get-Item $file).Basename
-    #Write-Host $gamename
     if (-not (Test-Path -Path $newdir))
     {
         Write-Host $file
@@ -37,4 +44,5 @@ Foreach ($file in $fileList)
         Copy-Item $file $newdir
     }
 }
+ConvertTo-Json $CONF | Out-File ($currentdir + "\game-id.json")
 Write-Host "处理完成！"
