@@ -1,7 +1,12 @@
 ﻿$currentdir = (Split-Path -Parent $MyInvocation.MyCommand.Definition)
 $inputdir = $currentdir + "\Album"
 $outputdir = $currentdir + "\Album-sorted"
-$CONF = (Get-Content "game-id.json") | ConvertFrom-Json
+$CONF = (Get-Content "game-id.json") | ConvertFrom-Json  -ErrorAction "SilentlyContinue"
+If (!$?)
+{
+    Write-Host "json格式错误，无法读取";
+    break
+};
 #Write-Host $currentdir
 
 if (-not (Test-Path -Path $outputdir))
@@ -34,3 +39,4 @@ Foreach ($file in $fileList)
     }
 }
 Write-Host "处理完成！"
+pause
