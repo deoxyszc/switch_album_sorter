@@ -6,8 +6,7 @@ If (!$?)
 {
     Write-Host "json格式错误，无法读取";
     break
-};
-#Write-Host $currentdir
+}
 
 if (-not (Test-Path -Path $outputdir))
 {
@@ -39,4 +38,3 @@ Foreach ($file in $fileList)
     }
 }
 Write-Host "处理完成！"
-pause
