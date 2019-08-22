@@ -19,17 +19,25 @@ Foreach ($file in $fileList)
 {
     #通过截图文件名获取游戏ID，通过ID查找json，获取游戏名#
     $filename_parse = (Get-Item $file).Basename -Split "-"
+    
+    #查找json中的记录#
     $gamename = $CONF.($filename_parse[1])
     
     #如果获取不到游戏名，需要打开对应截图，请求用户输入游戏名并记录#
-    #查找json中的记录#
     If($gamename -eq $null) 
     {
         Invoke-Item $file
-        $tempgamename = Read-Host '请输入现在打开的截图对应的游戏名：'
-        $CONF | add-member -Name $filename_parse[1] -Value $tempgamename -MemberType NoteProperty
+        $tempgamename = Read-Host "请输入现在打开的截图对应的游戏名"
+        if ($tempgamename -eq "")
+        {
+            Write-Host '输入的游戏名为空，将归类到"其他"文件夹中'
+            $tempgamename = "其他"
+        }
+        else
+        {
+            $CONF | add-member -Name $filename_parse[1] -Value $tempgamename -MemberType NoteProperty
+        }
         $gamename = $tempgamename
-        #Write-Host $CONF.($filename_parse[1])
     }
     $tempdir = $outputdir + '\' + $gamename
     $newdir  = $tempdir + '\' + (Split-Path -Leaf $file)
